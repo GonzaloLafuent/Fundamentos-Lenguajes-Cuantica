@@ -1,0 +1,364 @@
+\documentclass[final,twoside,spanish,a4paper,12pt]{book}
+\usepackage{cclicenses}
+\exhyphenpenalty=10000
+
+\usepackage{cmll}
+\usepackage{fancyhdr}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage[top=1in, bottom=1.5in, left=1in, right=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{needspace}
+\usepackage{tikz}
+\usetikzlibrary{cd,positioning,decorations.text}
+\tikzcdset{scale cd/.style={every label/.append style={scale=#1},cells={nodes={scale=#1}}}}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{multicol}
+\usepackage{url}
+\usepackage{lastpage}
+\usepackage{thmtools}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{nicefrac}
+\usepackage{bm}
+\usepackage{enumitem}
+\usepackage{cancel}
+\usepackage[llbracket,rrbracket]{stmaryrd}
+\usepackage{pifont}
+\renewcommand\thefootnote{\ding{\numexpr171+\value{footnote}}}
+\usepackage{soul,color}
+\usepackage{proof}
+\usepackage[square]{natbib}
+\usepackage[colorlinks,
+  urlcolor=blue,
+  linkcolor=blue,
+  citecolor=blue,
+  filecolor=black,
+bookmarks]
+{hyperref}
+\usepackage{adjustbox,varwidth,xparse}
+\usepackage{qcircuit}
+
+\allowdisplaybreaks
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3} 
+
+\parindent 0pt
+
+
+\newcommand{\boxedheader}[1]{%
+  \tikz[baseline=(X.base)]{
+    \node[
+      fill=gray!20,
+      draw=black,
+      rounded corners=3pt,
+      inner xsep=4pt,
+      inner ysep=2pt
+    ] (X) {#1};
+  }%
+}
+
+\newtheoremstyle{ejercicioBox}% nombre del estilo
+  {}{}% espacio arriba/abajo
+  {}% fuente del cuerpo
+  {}% indentación
+  {\bfseries}% fuente del encabezado
+  {}% puntuación después del encabezado
+  { }% espacio después del encabezado
+  {\boxedheader{\thmname{#1}\thmnumber{ #2}}\thmnote{ (#3)}}%
+
+\newtheoremstyle{defStyle}{}{}{}{}{\color{blue!50!black}\bfseries}{}{ }{}
+\theoremstyle{defStyle}
+\newtheorem{definicion}{Definición}[chapter]
+\newtheoremstyle{thmStyle}{}{}{}{}{\color{red!50!black}\bfseries}{}{ }{}
+\theoremstyle{thmStyle}
+\newtheorem{teorema}[definicion]{Teorema}
+\newtheorem{lema}[definicion]{Lema}
+\newtheorem{corolario}[definicion]{Corolario}
+\newtheorem*{propiedades}{Propiedades}
+\newtheorem*{propiedad}{Propiedad}
+\declaretheorem[style=definition]{postulado}
+\addtotheorempreheadhook[postulado]{%
+  \moveright\dimexpr(\linewidth-35em)/2\vbox\bgroup
+  \hsize=35em
+  \linewidth=\hsize
+}
+\addtotheorempostfoothook[postulado]{\egroup}
+\newenvironment{postuladobis}[1]
+{\renewcommand{\thepostulado}{\ref{#1}$'$}%
+  \addtocounter{postulado}{-1}%
+  \begin{postulado}}
+{\end{postulado}}
+\newenvironment{postuladoAlt}[1]
+{\renewcommand{\thepostulado}{\ref{#1}}%
+  \addtocounter{postulado}{-4}%
+  \begin{postulado}}
+{\end{postulado}}
+\theoremstyle{remark}
+\newtheorem*{observacion}{Observación}
+\newtheorem*{observaciones}{Observaciones}
+\newtheoremstyle{ejemploStyle}{}{}{}{}{\color{green!50!black}\bfseries}{}{ }{}
+\theoremstyle{ejemploStyle}
+\newtheorem{ejemplo}[definicion]{Ejemplo}
+\theoremstyle{ejercicioBox}
+\newtheorem{ejercicio}{Ejercicio}[part]
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RO,LE]{\thepage}
+\fancyhead[LO]{\rmfamily\sc\nouppercase\leftmark}
+\fancyhead[RE]{\rmfamily\sc\nouppercase\rightmark}
+\setlength{\headheight}{27.16pt}
+
+
+\newcommand\concat{\ensuremath{\mathop{+\!\!+}}}
+\newcommand\Obj{\ensuremath{\mathbf{Obj}}}
+\newcommand\Arr{\ensuremath{\mathbf{Arr}}}
+\newcommand\Id{\ensuremath{\mathsf{Id}}}
+\newcommand\Home[3][\mathsf{Set}]{\mathsf{Hom}_{#1}({#2},{#3})} 
+\newcommand\home[2]{[{#1},{#2}]} 
+\newcommand\coprodu[2]{\left[{#1},{#2}\right]} 
+\newcommand\xlra[1]{\overset{#1}{\longrightarrow}}
+\newcommand\inl{\mathsf{inl}}
+\newcommand\inr{\mathsf{inr}}
+\newcommand\elimtop[2]{\ensuremath{{#1};{#2}}}
+\newcommand\elimbot[1]{\ensuremath{\mathsf{err}(#1)}}
+\newcommand\elimandl[1]{\ensuremath{\pi_1{#1}}}
+\newcommand\elimandr[1]{\ensuremath{\pi_2{#1}}}
+\newcommand\elimor[5]{\ensuremath{\mathsf{match}(#1,#2.#3,#4.#5)}}
+\newcommand\B{\mathbb B}
+\newcommand\Q{\B}
+\newcommand\tbasis{\ensuremath{\mathfrak B}}
+\newcommand\types{\ensuremath{\mathcal T}}
+\newcommand\qtypes{\ensuremath{\mathcal Q}}
+\newcommand\values{\ensuremath{\mathcal V}}
+\newcommand\One{\bm{1}}
+\newcommand\Zero{\bm{0}}
+\newcommand\SN{\ensuremath{\mathcal{SN}}}
+\newcommand\Neu{\ensuremath{\mathcal N}}
+\newcommand\Red[1]{\ensuremath{\mathsf{Red}(#1)}}
+\newcommand\CR[1]{\ensuremath{(\mathsf{CR}_{#1})}}
+\newcommand\RC{\ensuremath{\mathcal{RC}}}
+\newcommand\conlista{\leavevmode\vspace{-0.4\baselineskip}}
+\newcommand\prodi[2]{\langle #1, #2 \rangle}
+\newcommand\norma[1]{\Vert #1 \Vert}
+\newcommand\braket[2]{\langle{#1}|{#2}\rangle}
+\newcommand\matriz[1]{\begin{pmatrix}#1\end{pmatrix}}
+\newcommand\conj[1]{#1^*}
+\newcommand\adj[1]{#1^\dagger}
+\newcommand\trans[1]{#1^T}
+\newcommand\inv[1]{#1^{-1}}
+\newcommand\ket[1]{|#1\rangle}
+\newcommand\bra[1]{\langle #1|}
+\newcommand\tr{\ensuremath{\mathsf{tr}}}
+\newcommand\ifz[3]{\ensuremath{\mathsf{isZ}({#1})?{#2}\!:\!{#3}}}
+\newcommand\ite[3]{\ifz{#1}{#2}{#3}}
+\newcommand\fun[2]{\ensuremath{\lambda #1.#2}}
+\newcommand\fix[2]{\ensuremath{ \mu #1.#2}}
+\newcommand\letl[3]{\ensuremath{\mathsf{let~}#1=#2\mathsf{~in~}#3}}
+\newcommand\nat{\ensuremath{\mathsf{nat}}}
+\newcommand\fst{\ensuremath{\pi_1}}
+\newcommand\snd{\ensuremath{\pi_2}}
+\newcommand\FV{\ensuremath{\mathsf{FV}}}
+\newcommand\mgu{\ensuremath{\mathsf{mgu}}}
+\newcommand\Gen{\ensuremath{\mathsf{Gen}}}
+\newcommand\s[1]{\ensuremath{\mathsf{#1}}}
+\newcommand\thunk[2]{\ensuremath{\langle{#1},{#2}\rangle}}
+\newcommand\cierre[3]{\ensuremath{\thunk{{#1},{#2}}{#3}}}
+\newcommand\hra{\ensuremath{\hookrightarrow}}
+\newcommand\sem[1]{\ensuremath{\left\llbracket {#1}\right\rrbracket}}
+\newcommand\semT[2][\theta]{\ensuremath{\sem{#2}_{#1}}}
+\newcommand\promote[3]{\ensuremath{\mathsf{promote}\ #1\ \mathsf{for}\ #2\ \mathsf{in}\ #3}}
+\newcommand\derelict[1]{\ensuremath{\mathsf{derelict}\ #1}}
+\newcommand\discard[2]{\ensuremath{\mathsf{discard}\ #1\ \mathsf{in}\ #2}}
+\newcommand\copyt[3]{\ensuremath{\mathsf{copy}\ #1\ \mathsf{as}\ #2\ \mathsf{in}\ #3}}
+\newcommand\prog[2]{[{#1},{#2}]}
+\newcommand\newq{\ensuremath{\mathsf{new}}}
+\newcommand\meas{\ensuremath{\mathsf{meas}}}
+\newcommand\bit{\ensuremath{\mathsf{bit}}}
+\newcommand\qbit{\ensuremath{\mathsf{qbit}}}
+\newcommand\te[1]{\ensuremath{\mathit{#1}}}
+\newcommand\un[1]{\ensuremath{\mathcal{#1}}}
+\newcommand\gen[1]{\ensuremath{\mathbb{#1}}}
+\newcommand\z[1][A]{\vec 0_{S(#1)}}
+\newcommand\pair[2]{\langle{#1},{#2}\rangle}
+\newcommand\lra{\longrightarrow}
+\newcommand\may[1][\alpha]{[{#1}.]}
+\newcommand\titulo[3][\scriptsize]{\rotatebox[origin=c]{90}{\parbox[t]{#2}{\centering #1{#3}}}}
+\newcommand\tax{\textsl{Ax}}
+\newcommand\tif{\textsl{If}}
+\newcommand\rbetab{(\s{\beta_b})}
+\newcommand\rbetan{(\s{\beta_n})}
+\newcommand\riftrue{(\s{if_{1}})}
+\newcommand\riffalse{(\s{if_{0}})}
+\newcommand\rlinr{(\s{lin^+_r})}
+\newcommand\rlinscalr{(\s{lin^\alpha_r})}
+\newcommand\rlinzr{(\s{lin^0_r})}
+\newcommand\rlinl{(\s{lin^+_l})}
+\newcommand\rlinscall{(\s{lin^\alpha_l})}
+\newcommand\rlinzl{(\s{lin^0_l})}
+\newcommand\rneut{(\s{neutral})}
+\newcommand\runit{(\s{unit})}
+\newcommand\rzeros{(\s{zero_\alpha})}
+\newcommand\rzeroS{(\s{zero_S})}
+\newcommand\rzero{(\s{zero})}
+\newcommand\rprod{(\s{prod})}
+\newcommand\rdists{(\s{\alpha dist})}
+\newcommand\rdistcasum{(\s{dist^+_\Uparrow})}
+\newcommand\rdistcascal{(\s{dist^\alpha_\Uparrow})}
+\newcommand\rcaneutl{(\s{neut^\Uparrow_l})}
+\newcommand\rcaneutr{(\s{neut^\Uparrow_r})}
+\newcommand\rfact{(\s{fact})}
+\newcommand\rfacto{(\s{fact^1})}
+\newcommand\rfactt{(\s{fact^2})}
+\newcommand\rproj{(\s{proj})}
+\newcommand\rehead{(\s{head})}
+\newcommand\rtail{(\s{tail})}
+\newcommand\rdistzr{(\s{dist^0_r})}
+\newcommand\rdistzl{(\s{dist^0_l})}
+\newcommand\rdistscalr{(\s{dist^\alpha_r})}
+\newcommand\rdistscall{(\s{dist^\alpha_l})}
+\newcommand\rdistsumr{(\s{dist^+_r})}
+\newcommand\rdistsuml{(\s{dist^+_l})}
+\newcommand\rcomm{(\s{comm})}
+\newcommand\rassoc{(\s{assoc})}
+\newcommand\cas[2]{\Uparrow^{\scriptscriptstyle S({#2})}_{\scriptscriptstyle S({#1})}}
+\newcommand\head{\text{\sl head}}
+\newcommand\tail{\text{\sl tail}}
+\newcommand\red[2][1]{\overset{\scriptscriptstyle\smash{#2}\vphantom{x}}{\lra[#1]}\ }
+\newcommand\npair[2]{({#1}-{#2})}
+
+\date{Versión (incompleta) del \today}
+\usepackage{graphicx} % Required for inserting images
+
+\title{TP-Fundamentos de lenguajes para computacion cuantica}
+\author{Matias Flores - Ignacio - Gonzalo Lafuente}
+
+\begin{document}
+
+\maketitle
+
+\section{Ejercicios}
+
+\subsection{Parte 1}
+
+\subsection{Parte 2}
+
+\subsection{Parte 3}
+
+
+
+\section{Codificación superdensa}
+El circuito completo queda de la siguiente manera
+\begin{eqnarray*}
+  \Qcircuit @C=1em @R=1em {
+  & \gate{Z^{b_1}X^{b_2}} \qw	& \push{|} \qw	& \ctrl{2} \qw	& \gate{H}	& \meter	& \qw	& \rstick{\ket{b_1}} \\
+  \lstick{\beta_{00}} & & \push{|} & & & & & \\
+  & \qw				& \push{|} \qw	& \targ \qw	& \qw		& \meter	& \qw	& \rstick{\ket{b_2}}
+                                                                    }
+\end{eqnarray*}
+donde la línea punteada determina el paso 4, en el que Alice envía su qubit a
+Bob.
+
+\subsection{Traza de Ejecucion}
+
+\begin{ejemplo}
+  Si se quiere enviar el bit $00$ se aplica $(I\otimes I)$ a
+  $\beta_{00}$, por lo que el no se modifica el estado de bell:
+
+  \begin{align*}
+    (I\otimes I)\beta_{00}
+    &= I \otimes \beta_{00}\\
+    &= I \otimes \frac{1}{\sqrt{2}}(\ket{00}+\ket{11})=\beta_{00}
+  \end{align*}
+
+  con lo que se obtiene $\beta_{00}$. Luego aplicamos $(H\otimes I) CNOT \beta_{00} $ para recuperar los bits:
+
+  \begin{align*}
+    (H\otimes I) CNOT \beta_{00}
+    &= (H\otimes I) (CNOT (\frac{1}{\sqrt{2}}(\ket{00}+\ket{11})))\\
+    &= (H\otimes I) (\frac{1}{\sqrt{2}}(\ket{00}+\ket{10}))\\
+    &= (H\otimes I) (\frac{\ket{0}+\ket{1}}{\sqrt{2}} \otimes \ket{0})\\
+    &= (\frac{(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}) + (\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))}{\sqrt{2}} \otimes \ket{0})\\
+    &= (\frac{{\sqrt{2}}\ket{0}}{\sqrt{2}} \otimes \ket{0}) = \ket{00} 
+  \end{align*}
+\end{ejemplo}
+
+\begin{ejemplo}
+  Si se quiere enviar el bit $01$ se aplica $(X\otimes I)$ a
+  $\beta_{00}$, el estado de bell se modificara de la siguiente manera:
+
+  \begin{align*}
+    (X\otimes I)\beta_{00}
+    &= (X \otimes I) \frac{1}{\sqrt{2}}(\ket{00}+\ket{11})\\
+    &= \frac{1}{\sqrt{2}}(\ket{10}+\ket{01}) = \frac{1}{\sqrt{2}}(\ket{01}+\ket{10}) = \beta_{01}\\
+  \end{align*}
+
+  con lo que se obtiene $\beta_{01}$. Luego aplicamos $(H\otimes I) CNOT \beta_{01} $ para recuperar los bits:
+
+  \begin{align*}
+    (H\otimes I) CNOT \beta_{01}
+    &= (H\otimes I) (CNOT (\frac{1}{\sqrt{2}}(\ket{01}+\ket{10})))\\
+    &= (H\otimes I) (\frac{1}{\sqrt{2}}(\ket{01}+\ket{11}))\\
+    &= (H\otimes I) (\frac{\ket{0}+\ket{1}}{\sqrt{2}} \otimes \ket{1})\\
+    &= (\frac{(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}) + (\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))}{\sqrt{2}} \otimes \ket{1})\\
+    &= (\frac{{\sqrt{2}}\ket{0}}{\sqrt{2}} \otimes \ket{0}) = \ket{01} 
+  \end{align*}
+\end{ejemplo}
+
+\begin{ejemplo}
+  Si se quiere enviar el bit $10$ se aplica $(Z\otimes I)$ a
+  $\beta_{00}$, el estado de bell se modificara de la siguiente manera:
+
+  \begin{align*}
+    (Z\otimes I)\beta_{00}
+    &= (Z \otimes I) \frac{1}{\sqrt{2}}(\ket{00}+\ket{11})\\
+    &= \frac{1}{\sqrt{2}}(\ket{00}-\ket{11}) = \frac{1}{\sqrt{2}}(\ket{00}-\ket{11}) = \beta_{10}\\
+  \end{align*}
+
+  con lo que se obtiene $\beta_{10}$. Luego aplicamos $(H\otimes I) CNOT \beta_{10} $ para recuperar los bits:
+
+  \begin{align*}
+    (H\otimes I) CNOT \beta_{10}
+    &= (H\otimes I) (CNOT (\frac{1}{\sqrt{2}}(\ket{00}-\ket{11})))\\
+    &= (H\otimes I) (\frac{1}{\sqrt{2}}(\ket{00}-\ket{10}))\\
+    &= (H\otimes I) (\frac{\ket{0}-\ket{1}}{\sqrt{2}} \otimes \ket{0})\\
+    &= (\frac{(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}) - (\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))}{\sqrt{2}} \otimes \ket{0})\\
+    &= (\frac{{\sqrt{2}}\ket{1}}{\sqrt{2}} \otimes \ket{0}) = \ket{10} 
+  \end{align*}
+\end{ejemplo}
+
+\begin{ejemplo}
+  SSi se quiere enviar el bit $11$ se aplica $(ZX\otimes I)$ a
+  $\beta_{00}$, el estado de bell se modificara de la siguiente manera:
+
+  
+  \begin{align*}
+    (ZX\otimes I)\beta_{00}
+    &=(Z\otimes I)\left((X\otimes I)\beta_{00}\right)\\
+    &=(Z\otimes I)\left((X\otimes I)\frac{1}{\sqrt{2}}(\ket{00}+\ket{11})\right)\\
+    &=(Z\otimes I)\left(\frac{1}{\sqrt{2}}(\ket{10}+\ket{01})\right)\\
+    &=\frac{1}{\sqrt{2}}(-\ket{10}+\ket{01})=\beta_{11}
+  \end{align*}
+
+
+  con lo que se obtiene $\beta_{11}$. Luego aplicamos $(H\otimes I) CNOT \beta_{11} $ para recuperar los bits:
+
+  \begin{align*}
+    (H\otimes I) CNOT \beta_{11}
+    &= (H\otimes I) (CNOT (\frac{1}{\sqrt{2}}(\ket{01}-\ket{10})))\\
+    &= (H\otimes I) (\frac{1}{\sqrt{2}}(\ket{01}-\ket{11}))\\
+    &= (H\otimes I) (\frac{\ket{0}-\ket{1}}{\sqrt{2}} \otimes \ket{1} )\\
+    &= (\frac{(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}) - (\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))}{\sqrt{2}})\\
+    &= (\frac{{\sqrt{2}}\ket{1}}{\sqrt{2}} \otimes \ket{1}) = \ket{11} 
+  \end{align*}
+\end{ejemplo}
+
+\subsection{Termino en calculo Lambda con control clasico}
+
+\subsection{Termino en calculo Lambda-S}
+
+\subsection{Termino en calculo L^ℂ}
+
+\end{document}
