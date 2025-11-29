@@ -243,10 +243,78 @@ bookmarks]
 
 \subsection{Parte 1}
 
+\begin{ejercicio}
+Determinar cuáles de los siguientes son términos bien formados según la gramática extendida del cálculo lambda, y justificar:
+\begin{enumerate}[label=\arabic*.]
+    \item $\lambda x.\langle x, \inl(\star)\rangle$
+    \item $\star;$
+    \item $\langle \lambda x.x, y z\rangle$
+    \item $\mathsf{match}(t, x.r, y.)$
+\end{enumerate}
+En cada caso, indicar por qué es correcto o por qué no lo es.
+\end{ejercicio}
+
+\textbf{Solución:}
+
+
+\begin{enumerate}[label=\arabic*.]
+    \item $\lambda x.\langle x, \inl(\star)\rangle$
+    
+    \begin{itemize}
+        \item La construcción $\lambda x.t$ requiere que $t$ sea un término bien formado.
+        \item $t = \langle x, \inl(\star)\rangle$ es un par $\langle t_1, t_2\rangle$
+        \item $t_1 = x$ es una variable $\rightarrow$ bien formada
+        \item $t_2 = \inl(\star)$ donde:
+        \begin{itemize}
+            \item $\inl(t')$ requiere $t'$ bien formado
+            \item $t' = \star$ es el par vacío $\rightarrow$ bien formado
+        \end{itemize}
+    \end{itemize}
+    \textcolor{green!50!black}{El término está bien formado}
+    
+    \item $\star;$
+    
+    \begin{itemize}
+        \item La construcción $t;r$ requiere dos términos $t$ y $r$
+        \item $t = \star$ es bien formado (par vacío)
+        \item Falta el segundo término $r$ después del `;'
+        \item La gramática exige que estén los dos terminos: $t;t$ 
+    \end{itemize}
+    \textcolor{red!50!black}{El término no está bien formado,}
+    
+    \item $\langle \lambda x.x, y z\rangle$
+    
+    \begin{itemize}
+        \item Construcción de par $\langle t_1, t_2\rangle$
+        \item $t_1 = \lambda x.x$ que es una abstracción bien formada
+        \item $t_2 = y z$ es una aplicación donde:
+        \begin{itemize}
+            \item $y$ es variable $\rightarrow$ bien formada
+            \item $z$ es variable $\rightarrow$ bien formada
+            \item $y z$ es aplicación bien formada
+        \end{itemize}
+    \end{itemize}
+    \textcolor{green!50!black}{El término está bien formado}
+    
+    \item $\mathsf{match}(t, x.r, y.)$
+    
+    \begin{itemize}
+        \item La construcción $\mathsf{match}(t, x.s_1, y.s_1)$ requiere:
+        \begin{itemize}
+            \item $t$ bien formado 
+            \item $x.s_1$ donde $s_1$ esté bien formado
+            \item $y.s_2$ donde $s_2$ esté bien formado
+        \end{itemize}
+        \item El tercer argumento $y.$ está incompleto, falta el término después del punto
+
+    \end{itemize}
+   \textcolor{red!50!black}{El término no está bien formado} 
+   
+\end{enumerate}
+
 \subsection{Parte 2}
 
 \subsection{Parte 3}
-
 
 
 \section{Codificación superdensa}
@@ -355,7 +423,40 @@ Bob.
   \end{align*}
 \end{ejemplo}
 
-\subsection{Termino en calculo Lambda con control clasico}
+\subsection{Término y Tipado para control clasico}
+
+
+\subsubsection{Término del Algoritmo}
+
+Definimos el término principal $M_{SD}$ que representa el protocolo completo:
+
+\begin{align*}
+M_{SD} &\equiv \lambda b_1 b_2. \lambda p_1 p_2. \\
+&\quad \mathsf{let}\ \langle q_1, q_2 \rangle = U_{H \otimes I}(U_{CNOT}(U_{Z^{b_1}X^{b_2} \otimes I} \langle p_1, p_2 \rangle))\ \mathsf{in} \\
+&\quad \langle \mathsf{meas}\ q_1, \mathsf{meas}\ q_2 \rangle
+\end{align*}
+
+Donde:
+\begin{itemize}
+\item $b_1, b_2$ son los bits clásicos a transmitir (0 o 1)
+\item $p_1, p_2$ son los qubits entrelazados en estado $\beta_{00}$
+\item $U_{Z^{b_1}X^{b_2} \otimes I}$ es la transformación de Alice
+\item $U_{CNOT}$ y $U_{H \otimes I}$ son las transformaciones de Bob
+\end{itemize}
+
+\subsubsection{Tipado del Término}
+
+El tipo del término es:
+
+$$\vdash M_{SD} : !(\mathsf{bit} \multimap \mathsf{bit} \multimap !(\mathsf{qbit} \otimes \mathsf{qbit} \multimap \mathsf{bit} \otimes \mathsf{bit}))$$
+
+\begin{itemize}
+\item $\mathsf{bit}$: tipo de bits clásicos 
+\item $\mathsf{qbit}$: tipo de qubits
+\item $\multimap$: implicación lineal 
+\item $!T$: tipo de términos duplicables/clonables
+\end{itemize}
+
 
 \subsection{Termino en calculo Lambda-S}
 
