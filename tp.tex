@@ -460,6 +460,43 @@ $$\vdash M_{SD} : !(\mathsf{bit} \multimap \mathsf{bit} \multimap !(\mathsf{qbit
 
 \subsection{Termino en calculo Lambda-S}
 
-\subsection{Termino en calculo L^ℂ}
+Definimo un termino para cada compuerta que utilizaremos: 
+
+\begin{align*}
+H = \lambda x : B.x? \ket{-}. \ket{+} : B \Rightarrow SB\\ \\
+\end{align*}
+
+Donde $\ket{+}$ y $\ket{-}$ estaran definidos de la siguiente manera:
+
+\begin{align*}
+\ket{-} = \frac{1}{\sqrt{2}}\ket{0}-\frac{1}{\sqrt{2}}\ket{1}\\ \\ 
+\ket{+} = \frac{1}{\sqrt{2}}\ket{0}+\frac{1}{\sqrt{2}}\ket{1} \\ \\
+\end{align*}
+
+Luego tenemos: 
+
+\begin{align*}
+Z = \lambda x : B.x? (-\ket{1}). \ket{0}: B \Rightarrow SB\\ \\
+NOT = \lambda x : B.x? \ket{0}. \ket{1}: B \Rightarrow B\\ \\
+CNOT = \lambda q : BXB. (\lambda q_1 .(\lambda q_2. q_1 ? q_1 \\ 
+\times (NOT\,q_2)  . q_1 \times q_2) tail \, q)head\,q : B\times B \rightarrow SB
+\end{align*}
+
+Apartir de la composicion de esta compuertas podemos generar el circuito completo:
+
+\begin{align*}
+& Alice = \lambda q: B \times B. \\
+&\qquad (\lambda q_1.\; (\lambda q_2.\; \\
+&\qquad\qquad q_1? \\
+&\qquad\qquad\qquad q_2? \\
+&\qquad\qquad\qquad\qquad \lambda bell.\; NOT(Z\, bell)\; \\ 
+&\qquad\qquad\qquad\qquad .\lambda bell.\; Z\, bell\; \\
+&\qquad\qquad.q_2? \lambda bell.\; NOT\, bell \\
+&\qquad\qquad\qquad .\lambda bell. bell \\ 
+&\qquad )) {tail}(q))\; {head}(q) : B \times B \rightarrow (SB \Rightarrow SB)
+\end{align*}
+
+\subsection{Termino en calculo Lc}
+
 
 \end{document}
