@@ -233,7 +233,7 @@ bookmarks]
 \usepackage{graphicx} % Required for inserting images
 
 \title{TP-Fundamentos de lenguajes para computacion cuantica}
-\author{Matias Flores - Ignacio - Gonzalo Lafuente}
+\author{Matias Flores -  Ignacio Bousoño  - Gonzalo Lafuente}
 
 \begin{document}
 
@@ -704,6 +704,7 @@ CNOT = \lambda q : BXB. (\lambda q_1 .(\lambda q_2. q_1 ? q_1 \\
 Apartir de la composicion de esta compuertas podemos generar el circuito completo:
 
 \begin{align*}
+& EPR = \frac{1}{\sqrt{2}}(\ket{00}+\ket{11}) \\ \\
 & Alice = \lambda q: B \times B. \\
 &\qquad (\lambda q_1.\; (\lambda q_2.\; \\
 &\qquad\qquad q_1? \\
@@ -712,11 +713,12 @@ Apartir de la composicion de esta compuertas podemos generar el circuito complet
 &\qquad\qquad\qquad\qquad .\lambda bell.\; Z\, bell\; \\
 &\qquad\qquad.q_2? \lambda bell.\; NOT\, bell \\
 &\qquad\qquad\qquad .\lambda bell. bell \\ 
-&\qquad )) {tail}(q))\; {head}(q) : B \times B \rightarrow (SB \Rightarrow SB)
+&\qquad )) {tail}(q))\; {head}(q) : B \times B \rightarrow (SB \Rightarrow SB) \\ \\
+& Bob = \lambda q: B \times B.(\lambda qn. H (head \, qn) \times (tail \, qn)  )(CNOT \, q) \\ \\
+& codificacion \, superdenesa = \lambda b: B \times B. Bob ((Alice \, b) EPR)\\
 \end{align*}
 
 \subsection{Termino en calculo Lc}
 
 
 \end{document}
-
