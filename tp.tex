@@ -314,8 +314,227 @@ En cada caso, indicar por qué es correcto o por qué no lo es.
 
 \subsection{Parte 2}
 
+\begin{ejercicio}
+Verificar que \textbf{Set} es una categoría
+\end{ejercicio}
+
+\begin{enumerate}
+    \item Obj(\textbf{Set}) son los conjuntos.
+    \item Los morfismos, Hom(\textbf{Set}), son las funciones totales entre conjuntos.
+    \item El operador de composición es la composición usual de funciones, donde dado 
+
+    \( f \in \text{Hom}(A,B) \) y \( g \in \text{Hom}(B,C) \), queremos ver que existe \( h \in \text{Hom}(A,C) \) tal que
+    \[
+        h = g \circ f.
+    \]
+    La composición de funciones totales es una función total, por lo tanto \( h \) existe.
+    \item Queremos ver que el operador de composición es asociativo, es decir, dado
+    \[
+        f \in \text{Hom}(A,B), \quad g \in \text{Hom}(B,C), \quad h \in \text{Hom}(C,D)
+    \]
+    se cumple
+    \[
+        h \circ (g \circ f) = (h \circ g) \circ f.
+    \]
+    \begin{itemize}
+        \item Ida:
+        \[
+            (h \circ (g \circ f))(a) = h((g \circ f)(a)) = h(g(f(a)))
+        \]
+        \item Vuelta:
+        \[
+            ((h \circ g) \circ f)(a) = (h \circ g)(f(a)) = h(g(f(a)))
+        \]
+    \end{itemize}
+    Por lo tanto las funciones son iguales.
+    \item Por último, nos falta ver que existe \( \text{id}_A \in \text{Hom}(A,A) \) con \( A \in \text{Obj(\textbf{Set})} \).  
+    
+    Dado \( A \in \text{Obj(\textbf{Set})} \), definimos \( \text{id}_A \in \text{Hom}(A,A) \) como
+    \[
+        \text{id}_A(a) = a \quad \text{para todo } a \in A.
+    \]
+    Para cualquier \( f \in \text{Hom}(A,B) \):
+    \[
+        (\text{id}_B \circ f)(x) = \text{id}_B(f(x)) = f(x), \quad
+        (f \circ \text{id}_A)(x) = f(\text{id}_A(x)) = f(x)
+    \]
+    Concluimos que \textbf{Set} es una categoría.
+\end{enumerate}
+
+\begin{ejercicio}
+Probar que la composición de funciones que preservan el orden también preserva el orden, y que la identidad de cada conjunto parcialmente ordenado preserva el orden. Concluir que \textbf{Poset} es una categoría.
+\end{ejercicio}
+
+\begin{enumerate}
+    \item Obj(\textbf{Poset}) son los conjuntos parcialmente ordenados, es decir, es una colección de pares \((P, \le_P)\) donde \(\le_P\) es un orden parcial para el conjunto \(P\).
+    \item Los morfismos, Hom(\textbf{Poset}), son las funciones totales que preservan el orden. 
+
+    Tienen la forma \( f: (P, \le_P) \to (Q, \le_Q) \) y que preserven el orden significa que
+    \[
+        a \le_P a' \implies f(a) \le_Q f(a').
+    \]
+    \item Sean \((A,\le_A), (B,\le_B), (C,\le_C) \in \text{Obj(\textbf{Poset})}\)
+    \[
+        f \in \text{Hom}[(A,\le_A),(B,\le_B)], \quad g \in \text{Hom}[(B,\le_B),(C,\le_C)]
+    \]
+    Queremos probar que \( h = g \circ f \in \text{Hom}[(A,\le_A),(C,\le_C)] \), es decir, que \(h\) preserva el orden.  
+    
+    Tomemos \( a_1, a_2 \in A \) tales que \( a_1 \le_A a_2 \). Sabemos que \( f(a_1) \le_B f(a_2) \).  
+    Como \( f(a_1), f(a_2) \in B \), tenemos que \( g(f(a_1)) \le_C g(f(a_2)) \).  
+    
+    Luego \( h = g \circ f \):
+    \[
+        h(a_1) = g(f(a_1)), \quad h(a_2) = g(f(a_2))
+    \]
+    Por lo tanto, \( a_1 \le_A a_2 \implies h(a_1) \le_C h(a_2) \), y \( h \) preserva el orden.
+    \item La asociatividad del operador de composición viene dada por la asociatividad de las funciones, demostrada en el punto anterior.
+    \item Lo último para probar es que la identidad preserva el orden.  
+    Sea \((A, \le_A) \in \text{Obj(\textbf{Poset})}\). Definimos
+    \[
+        \text{id}_A \in \text{Hom}[(A, \le_A), (A, \le_A)], \quad \text{id}_A(a) = a \text{ para todo } a \in A.
+    \]
+    Sean \( a_1, a_2 \in A \) tales que \( a_1 \le_A a_2 \). Vemos que
+    \[
+        \text{id}_A(a_1) = a_1, \quad \text{id}_A(a_2) = a_2
+    \]
+    Por lo que, si \( a_1 \le_A a_2 \), entonces \( \text{id}_A(a_1) \le_A \text{id}_A(a_2) \).  
+    La identidad preserva el orden.
+\end{enumerate}
+
+Concluimos que \textbf{Poset} es una categoría.
+
+
 \subsection{Parte 3}
 
+\begin{ejercicio}
+Determinar el producto tensorial entre $\mathbb{R}^3$ y $\mathbb{R}^2$: describir una base explícita 
+de $\mathbb{R}^3 \times \mathbb{R}^2$ y su dimensión. 
+
+¿Qué sucede si queremos calcular el producto tensorial entre $\mathbb{R}^3$ y $\mathbb{C}^2$?
+¿Es posible hacerlo? Explicar.
+\end{ejercicio}
+
+Para espacios vectoriales de dimension finita, tenemos que
+\[
+\mathrm{dim}(\mathbb{R}^3 \otimes \mathbb{R}^2)
+= \mathrm{dim}(\mathbb{R}^3)\cdot \mathrm{dim}(\mathbb{R}^2)
+= 3 \cdot 2 = 6.
+\]
+
+Ahora, sean $A = \{a_1, a_2\}$ y $B = \{b_1, b_2, b_3\}$ bases canonicas para $\mathbb{R}^2$ y $\mathbb{R}^3$ respectivamente.
+La base del producto tensorial $\mathbb{R}^3 \otimes \mathbb{R}^2$ viene dada por
+\[
+C = \{ b_i \otimes a_j : i \in \{1,2,3\},\ j \in \{1,2\} \}
+= \{ b_1 \otimes a_1,\ b_1 \otimes a_2,\ b_2 \otimes a_1,\ b_2 \otimes a_2,\ b_3 \otimes a_1,\ b_3 \otimes a_2 \}.
+\]
+
+Para la segunda parte, comenzamos notando que el producto tensorial esta siempre definido
+para espacios vectoriales sobre el mismo cuerpo, por lo que no podria, a priori, calcularlo entre
+$\mathbb{R}^3$ y $\mathbb{C}^2$.
+\\
+
+Lo que si podemos hacer es llevar ambos espacio vectoriales sobre un mismo cuerpo. 
+
+Lo mas sencillo es llevar todo a $\mathbb{R}$. 
+
+Podemos pensar a $\mathbb{C}^2$ como un espacio vectorial sobre $\mathbb{R}$, el cual seria isomorfo a $\mathbb{R}^4$.
+
+Ya que, sea $c$ un vector de $\mathbb{C}^2$, $c = (z_1,z_2)$ donde $z_1,z_2$ son numeros complejos,
+pero a todo numero complejo lo puedo escribir como $z = a + bi$, donde $a,b$ son reales.
+Por lo tanto $c = (a_1 + b_1 i,\ a_2 + b_2 i)$, que lo puedo representar como un vector
+en $\mathbb{R}^4$ tal que $c = (a_1,b_1,a_2,b_2)$ entonces 
+\[ \mathbb{C}^2 \cong \mathbb{R}^4 \]
+
+Luego, como $\mathrm{dim}_{\mathbb{R}}(\mathbb{C}^2) = 4$, tenemos que
+\[
+\mathrm{dim}_{\mathbb{R}}(\mathbb{R}^3 \times \mathbb{C}^2)
+= \mathrm{dim}_{\mathbb{R}}(\mathbb{R}^3) \cdot \mathrm{dim}_{\mathbb{R}}(\mathbb{C}^2)
+= 3 \cdot 4 = 12.
+\]
+Es decir, puedo realizar la operacion llevando todo a $\mathbb{R}$, pero me aumenta la dimension del producto tensorial.
+
+
+\begin{ejercicio}
+Calcular los siguientes productos tensoriales de matrices / vectores.
+\end{ejercicio}
+
+\begin{enumerate}
+    \item
+    \[
+    \begin{pmatrix} 1 \\ 2 \end{pmatrix}
+    \otimes
+    \begin{pmatrix} 3 & 4 \end{pmatrix}
+    =
+    \begin{pmatrix} 3 & 4 \\ 6 & 8 \end{pmatrix}
+    \]
+
+    \item
+    \[
+    \begin{pmatrix} 3 & 4 \end{pmatrix}
+    \otimes
+    \begin{pmatrix} 1 \\ 2 \end{pmatrix}
+    =
+    \begin{pmatrix} 3 & 4 \\ 6 & 8 \end{pmatrix}
+    \]
+
+    \item
+    \[
+    \begin{pmatrix} 2 \\ 1 \end{pmatrix}
+    \otimes
+    \begin{pmatrix} a & b \\ c & d \end{pmatrix}
+    =
+    \begin{pmatrix}
+    2a & 2b \\
+    2c & 2d \\
+    a & b \\
+    c & d
+    \end{pmatrix}
+    \]
+
+    \item
+    \[
+    \begin{pmatrix} a & b \\ c & d \end{pmatrix}
+    \otimes
+    \begin{pmatrix} 2 \\ 1 \end{pmatrix}
+    =
+    \begin{pmatrix}
+    2a & 2b \\
+    a & b \\
+    2c & 2d \\
+    2c & d \\
+    \end{pmatrix}
+    \]
+
+    \item
+    \[
+    \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}
+    \otimes
+    \begin{pmatrix} 1 \\ 0 \end{pmatrix}
+    =
+    \begin{pmatrix}
+    0 \\
+    0 \\
+    0 \\
+    0 \\ 
+    1 \\
+    0
+    \end{pmatrix}
+    \]
+
+    \item
+    \[
+    \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}
+    \otimes
+    \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}
+    =
+    \begin{pmatrix}
+    0 & 1 & 0 & 0 \\
+    1 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 1 \\
+    0 & 0 & 1 & 0
+    \end{pmatrix}
+    \]
+\end{enumerate}
 
 \section{Codificación superdensa}
 El circuito completo queda de la siguiente manera
@@ -500,3 +719,4 @@ Apartir de la composicion de esta compuertas podemos generar el circuito complet
 
 
 \end{document}
+
