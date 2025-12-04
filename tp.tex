@@ -617,7 +617,7 @@ Bob.
 \end{ejemplo}
 
 \begin{ejemplo}
-  SSi se quiere enviar el bit $11$ se aplica $(ZX\otimes I)$ a
+  Si se quiere enviar el bit $11$ se aplica $(ZX\otimes I)$ a
   $\beta_{00}$, el estado de bell se modificara de la siguiente manera:
 
   
@@ -647,21 +647,33 @@ Bob.
 
 \subsubsection{Término del Algoritmo}
 
-Definimos el término principal $M_{SD}$ que representa el protocolo completo:
-
 \begin{align*}
-M_{SD} &\equiv \lambda b_1 b_2. \lambda p_1 p_2. \\
-&\quad \mathsf{let}\ \langle q_1, q_2 \rangle = U_{H \otimes I}(U_{CNOT}(U_{Z^{b_1}X^{b_2} \otimes I} \langle p_1, p_2 \rangle))\ \mathsf{in} \\
-&\quad \langle \mathsf{meas}\ q_1, \mathsf{meas}\ q_2 \rangle
+EPR = \lambda _. (CNOT <H \,new \, 0, new \, 0>) \\ \\
 \end{align*}
 
-Donde:
-\begin{itemize}
-\item $b_1, b_2$ son los bits clásicos a transmitir (0 o 1)
-\item $p_1, p_2$ son los qubits entrelazados en estado $\beta_{00}$
-\item $U_{Z^{b_1}X^{b_2} \otimes I}$ es la transformación de Alice
-\item $U_{CNOT}$ y $U_{H \otimes I}$ son las transformaciones de Bob
-\end{itemize}
+\begin{align*}
+Alice = \lambda q_a. \lambda <b_1,b_2>. \\  
+& if \, b_1 \, then \, \\ 
+&\qquad if \, b_2 \, then \, Z \, X \, q_a\, \\
+&\qquad else \, Z \, q_a\, \\
+& else \\
+&\qquad if \, b_2 \, then X \, q_a\, \\ 
+&\qquad else \, I \, q_a\, \\ 
+\end{align*}
+
+\begin{align*}
+Bob = \lambda q_1. \lambda q_2. \,let <q_1', q_2'> = CNOT <q_1, q_2> in <H \, q_1', q_2'>
+\end{align*}
+
+El termino principal queda definido por:
+
+\begin{align*}
+SDC = \lambda b_1. \lambda b_2. \\
+&let \, <q_a, q_b> = EPR \,* \,in \\
+&let \, q_a' = Alice \, q_a \, <b_1,b_2> \, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',q_b'> \\ 
+& in <meas \, q_a'', meas \, q_b''>\\ 
+\end{align*}
 
 \subsubsection{Tipado del Término}
 
@@ -675,6 +687,113 @@ $$\vdash M_{SD} : !(\mathsf{bit} \multimap \mathsf{bit} \multimap !(\mathsf{qbit
 \item $\multimap$: implicación lineal 
 \item $!T$: tipo de términos duplicables/clonables
 \end{itemize}
+
+\subsubsection{Traza de reduccion}
+
+Tomamos la reduccion para la transmisicion de $(0,0)$
+
+\begin{align*}
+[,,SDC \,0 \,0] \\ \\
+[,,(\lambda b_1. \lambda b_2. \\ 
+&let \, <q_a, q_b> = EPR \,* \,in \\
+&let \, q_a' = Alice \, q_a \, <b_1,b_2> \, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',q_b> \\ 
+& in <meas \, q_a'', meas \, q_b''>) 0 \,0] \\ \\
+[,, \\ 
+&let \, <q_a, q_b> = ( \lambda _. (CNOT <H \,new \, 0, new \, 0>)) \,* \,in \\
+&let \, q_a' = Alice \, q_a \, <b_1,b_2> \, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',q_b> \\ 
+& in <meas \, q_a'', meas \, q_b''>) 0 \,0] \\ \\
+[\ket{0}\ket{0},,(\lambda b_1. \lambda b_2. \\ 
+&let \, <q_a, q_b> = (CNOT <H \,p_0, \,p_1>) \,in \\
+&let \, q_a' = Alice \, q_a \, <b_1,b_2> \, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',q_b> \\ 
+& in <meas \, q_a'', meas \, q_b''>) 0 \,0] \\
+[\ket{0}\ket{0},,(\lambda b_1. \lambda b_2. \\ 
+&let \, <q_a, q_b> = CNOT <H \,p_0, \,p_1> \,in \\
+&let \, q_a' = Alice \, q_a \, <b_1,b_2> \, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',q_b> \\ 
+& in <meas \, q_a'', meas \, q_b''>) 0 \,0] \\ \\
+[\ket{+}\ket{0},,(\lambda b_1. \lambda b_2. \\ 
+&let \, <q_a, q_b> = (CNOT <\,p_0, \,p_1>) \,* \,in \\
+&let \, q_a' = Alice \, q_a \, <b_1,b_2> \, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',q_b> \\ 
+& in <meas \, q_a'', meas \, q_b''>) 0 \,0] \\
+[B_{00},p_0 \rightarrow 0, p_1 \rightarrow 1,(\lambda b_1. \lambda b_2. \\ 
+&let \, <q_a, q_b> = <p_0, p_1> \,in \\
+&let \, q_a' = Alice \, q_a \, <b_1,b_2> \, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',q_b> \\ 
+& in <meas \, q_a'', meas \, q_b''>) 0 \,0] \\
+[B_{00},p_0 \rightarrow 0, p_1 \rightarrow 1,(\lambda b_1. \lambda b_2. \\ 
+&let \, q_a' = Alice \, p_0 \, <b_1,b_2> \, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',p_1> \\ 
+& in <meas \, q_a'', meas \, q_b''>) 0 \,0] \\
+[B_{00},p_0 \rightarrow 0, p_1 \rightarrow 1,(\lambda b_1. \lambda b_2. \\ 
+&let \, q_a' = (\lambda q_a. \lambda <b_1,b_2>. \\  
+& if \, b_1 \, then \, \\ 
+&\qquad if \, b_2 \, then \, Z \, X \, q_a\, \\
+&\qquad else \, Z \, q_a\, \\
+& else \\
+&\qquad if \, b_2 \, then X \, q_a\, \\ 
+&\qquad else \, I \, q_a\, \\ )\, p_0 \, <b_1,b_2> \, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',p_1> \\ 
+& in <meas \, q_a'', meas \, q_b''>) 0 \,0] \\
+[B_{00},p_0 \rightarrow 0, p_1 \rightarrow 1,\\ 
+&let \, q_a' = (\lambda q_a. \lambda <b_1,b_2>. \\  
+& if \, b_1 \, then \, \\ 
+&\qquad if \, b_2 \, then \, Z \, X \, q_a\, \\
+&\qquad else \, Z \, q_a\, \\
+& else \\
+&\qquad if \, b_2 \, then X \, q_a\, \\ 
+&\qquad else \, I \, q_a\, \\ )\, p_0 \, <0,0> \, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',p_1> \\ 
+& in <meas \, q_a'', meas \, q_b''>] \\
+[B_{00},p_0 \rightarrow 0, p_1 \rightarrow 1,\\ 
+&let \, q_a' = \\  
+& if \, 0 \, then \, \\ 
+&\qquad if \, 0 \, then \, Z \, X \, p_0\, \\
+&\qquad else \, Z \, p_0\, \\
+& else \\
+&\qquad if \, 0 \, then X \, p_0\, \\ 
+&\qquad else \, I \, p_0\, \\ \, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',p_1> \\ 
+& in <meas \, q_a'', meas \, q_b''>] \\
+[B_{00},p_0 \rightarrow 0, p_1 \rightarrow 1,\\ 
+&let \, q_a' = \\  
+& if \, 0 \, then \, \\ 
+&\qquad if \, 0 \, then \, Z \, X \, p_0\, \\
+&\qquad else \, Z \, p_0\, \\
+& else \\
+&\qquad if \, 0 \, then X \, p_0\, \\ 
+&\qquad else \, I \, p_0\, \\ \, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',p_1> \\ 
+& in <meas \, q_a'', meas \, q_b''>] \\
+[B_{00},p_0 \rightarrow 0, p_1 \rightarrow 1,\\ 
+&let \, q_a' = p_0\, in \\ 
+&let \, <q_a'', q_b''> = Bob \, <q_a',p_1> \\ 
+& in <meas \, q_a'', meas \, q_b''>] \\
+[B_{00},p_0 \rightarrow 0, p_1 \rightarrow 1,\\  
+&let \, <q_a'', q_b''> = Bob \, <p_0,p_1> \\ 
+& in <meas \, q_a'', meas \, q_b''>] \\
+[B_{00},p_0 \rightarrow 0, p_1 \rightarrow 1,\\  
+&let \, <q_a'', q_b''> = (\lambda q_1. \lambda q_2. \,let <q_1', q_2'> = \\ 
+&\qquad CNOT <q_1, q_2> in <H \, q_1', q_2'>)\, <p_0,p_1> \\ 
+& in <meas \, q_a'', meas \, q_b''>] \\
+[B_{00},p_0 \rightarrow 0, p_1 \rightarrow 1,\\  
+&let \, <q_a'', q_b''> = \,let <q_1', q_2'> = \\ 
+&\qquad CNOT <p_0, p_1> in <H \, q_1', q_2'> \\ 
+& in <meas \, q_a'', meas \, q_b''>] \\
+[\ket{+} \ket{0},p_0 \rightarrow 0, p_1 \rightarrow 1,\\  
+&let \, <q_a'', q_b''> = (\,let <q_1', q_2'> = \\ 
+&\qquad CNOT <p_0, p_1> in <H \, q_1', q_2'> )\\ 
+& in <meas \, q_a'', meas \, q_b''>] \\
+[\ket{+} \ket{0},p_0 \rightarrow 0, p_1 \rightarrow 1,\\  
+&let \, <q_a'', q_b''> = (<H \, p_0, p_1> )\\ 
+& in <meas \, q_a'', meas \, q_b''>] \\
+[\ket{0} \ket{0},p_0 \rightarrow 0, p_1 \rightarrow 1,\\ 
+& in <meas \, p_0, meas \, p_1>] \\
+\end{align*}
+
 
 
 \subsection{Termino en calculo Lambda-S}
@@ -705,7 +824,7 @@ Apartir de la composicion de esta compuertas podemos generar el circuito complet
 
 \begin{align*}
 & EPR = \frac{1}{\sqrt{2}}(\ket{00}+\ket{11}) \\ \\
-& Alice = \lambda q: B \times B. \\
+& ALICE = \lambda q: B \times B. \\
 &\qquad (\lambda q_1.\; (\lambda q_2.\; \\
 &\qquad\qquad q_1? \\
 &\qquad\qquad\qquad q_2? \\
@@ -714,11 +833,18 @@ Apartir de la composicion de esta compuertas podemos generar el circuito complet
 &\qquad\qquad.q_2? \lambda bell.\; NOT\, bell \\
 &\qquad\qquad\qquad .\lambda bell. bell \\ 
 &\qquad )) {tail}(q))\; {head}(q) : B \times B \rightarrow (SB \Rightarrow SB) \\ \\
-& Bob = \lambda q: B \times B.(\lambda qn. H (head \, qn) \times (tail \, qn)  )(CNOT \, q) \\ \\
-& codificacion \, superdenesa = \lambda b: B \times B. Bob ((Alice \, b) EPR)\\
+& BOB = \lambda q: B \times B.(\lambda qn. H (head \, qn) \times (tail \, qn)  )(CNOT \, q) \\ \\
+& SDC = \lambda b: B \times B. Bob ((Alice \, b) EPR)\\
 \end{align*}
+
+\subsubsection{Tipado del termino}
+
+\subsubsection{Traza de reduccion}
 
 \subsection{Termino en calculo Lc}
 
+\subsubsection{Tipado del termino}
+
+\subsubsection{Traza de reduccion}
 
 \end{document}
