@@ -229,6 +229,13 @@ bookmarks]
 \newcommand\red[2][1]{\overset{\scriptscriptstyle\smash{#2}\vphantom{x}}{\lra[#1]}\ }
 \newcommand\npair[2]{({#1}-{#2})}
 
+\newcommand{\roundarrow}{
+  \tikz[baseline=-0.5ex]{
+    \draw[line width=0.9pt] (0,0) -- (0.4,0);
+    \draw[line width=0.9pt] (0.4,0) circle (0.07);
+  }
+}
+
 \date{Versión (incompleta) del \today}
 \usepackage{graphicx} % Required for inserting images
 
@@ -841,7 +848,73 @@ Apartir de la composicion de esta compuertas podemos generar el circuito complet
 
 \subsubsection{Traza de reduccion}
 
-\subsection{Termino en calculo Lc}
+\subsection{Termino en calculo Lb}
+Definimos como macros:
+
+\begin{align*}
+\ket{0} = <*, \, 0.*> \\
+\ket{1} = <0.*,*>
+\end{align*}
+
+Empecemos codificando las compuertas basicas:
+\begin{align*}
+X = \lambda x:1 \& 1.(\ket{1} \,. \delta¹ (x,x_1.x_1) + \ket{0} \,. \delta²(x,x_2.x_2) ): 1\&1 \roundarrow 1\& 1 \\ \\
+Z = \lambda x:1 \& 1.(\ket{0} \,. \delta¹ (x,x_1.x_1) + (-1.\ket{1}) \,. \delta²(x,x_2.x_2) ): 1\&1 \roundarrow 1\& 1 \\ \\
+H = \lambda x:1 \& 1.(\frac{1}{\sqrt{2}}(\ket{0} + \ket{1}) \,. \delta¹ (x,x_1.x_1) + (\frac{1}{\sqrt{2}}(\ket{0} - \ket{1}) \,. \delta²(x,x_2.x_2) ): 1\&1 \roundarrow 1\& 1 \\ \\
+CNOT = \lambda z: 1 \& 1 \times 1 \& 1.\delta_{\otimes}(z,xy.\frac{1}{2}.(x x y) + \frac{1}{2}.(Z x x y) + \frac{1}{2}.(x x X y) + -\frac{1}{2}.(Z x x X))\\
+\end{align*}
+
+Luego definimos una macro para $B_{00}$
+
+\begin{align*}
+B_{00} = \frac{1}{\sqrt{2}}.(<*,0.*> \times <*,0.*>) + \frac{1}{\sqrt{2}}.(<0.*,*>) \times <0.*,*>))    
+\end{align*}
+
+Con esto pasamos a construir los componentes claves para la obtension de circuito:
+
+\begin{align*}
+ALICE = \lambda b_1 : 1+ 1.\lambda b_2: 1+1. \lambda q: 1\&1. \delta_{\bigoplus}(b_1, x_1.\delta_{\bigoplus}(b_2, x_2.q, y_2.X \,q), \\ 
+\, y_1.\delta_{\bigoplus}(b_2, x_2.Z \, q, y_2. Z \, X \, q)) : 1+1 \roundarrow 1+1 \roundarrow 1\&1 \roundarrow 1\&1
+\end{align*}
+
+Quiero modelar el hecho de que Alice opera localmente sobre su qubit, para eso
+voy a tener una funcion ENCODING sea tal que me tome los dos bits clasicos
+y el par entrelazado EPR y me devuelve un par
+
+\begin{align*}
+ENCODING = \lambda b_0 : 1+1.\lambda b_1 : 1+1.\lambda q : 1\&1. \delta_{\otimes}(q, yz.(ALICE \, b_0 \,b_1 \,y) \, x \, z) : 1+1 \roundarrow 1+1 \roundarrow 1\&1 \times 1\&1 \roundarrow 1\&1 \times 1\&1
+\end{align*}
+
+Para construir $BOB$ definimos:
+
+\begin{align*}
+HxI = \lambda q : 1\&1\times1\&1.\delta_{\otimes}(q, yz.(H\,y) \, x \, z):1\&1\times1\&1 \roundarrow 1\&1\times1\&1   
+\end{align*}
+
+Luego:
+
+\begin{align*}
+BOB = \lambda q:1\&1.(HxI)(CNOT \, q):1\&1 \roundarrow 1\&1   
+\end{align*}
+
+Para establecer la medicion tenemos: 
+
+\begin{align*}
+BIT(0,0) = inl(*) \times inl(*) \\
+BIT(0,1) = inl(*) \times inr(*) \\
+BIT(1,0) = inr(*) \times inl(*) \\
+BIT(1,1) = int(*) \times inr(*) \\ \\
+Proj_{ij}(q) = \delta_{\otimes} (q. xy.(Proj_i(x) . Proj_j(y))) \\
+Proj_0 = \delta_&^1(x,x1.x1) \\
+Proj_1 = \delta_&^2(x,x2.x2) 
+\end{align*}
+
+Luego tenemos que:
+
+\begin{align*}
+SDC = \lambda b_1 :1+1.\lambda b_2 :1+1. MEAS(BOB(ENCODING \, b_1 \, b_2 \, B_{00})) \\
+:1+1 \roundarrow 1+1 \roundarrow (1+1 \times 1+1)
+\end{align*}
 
 \subsubsection{Tipado del termino}
 
