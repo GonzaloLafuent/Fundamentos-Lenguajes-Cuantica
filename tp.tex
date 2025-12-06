@@ -898,7 +898,8 @@ Apartir de la composicion de esta compuertas podemos generar el circuito complet
        : S(B \times B) \Rightarrow B \times B
 \end{align*} \\ \\
 
-& SDC = \lambda b: B \times B. Bob ((Alice \, b) EPR)\\
+\begin{align*}
+SDC = \lambda b: B \times B. Bob ((Alice \, b) EPR)\\
 \end{align*}
 
 
@@ -916,12 +917,11 @@ El tipo del término $\mathtt{SDC}$ es:
 Tomamos la reduccion para la transmisicion de $(0,0)$
 
 \[
-\code{SDC}(\ket{00}) = \code{BOB}\big((\code{ALICE}\,\ket{00})\,\code{EPR}\big)
+{SDC}(\ket{0} \times \ket{0}) = {BOB}\big(({ALICE}\,\ket{0} \times \ket{0})\,{EPR}\big)
 \]
 
-
 \begin{align*}
-\code{ALICE}\,\ket{00} &\rightarrow
+{ALICE}\,\ket{0} \times \ket{0} &\rightarrow
  \lambda q. \\
 &\qquad (\lambda q_1.\; (\lambda q_2.\; \\
 &\qquad\qquad q_1? \\
@@ -931,13 +931,13 @@ Tomamos la reduccion para la transmisicion de $(0,0)$
 &\qquad\qquad.q_2? \lambda bell.\; NOT\, bell \\
 &\qquad\qquad\qquad .\lambda bell. bell \\ 
 &\qquad )) {tail}(q))\; {head}(q)  \\ \\
-&\text{head}(\ket{00}) = \ket{0} \text{ y } {tail}(\ket{00})  = \ket{0} \text{ El condicional } q_1?\text{ se evalúa.} \\
+&\text{head}(\ket{0} \times \ket{0}) = \ket{0} \text{ y } {tail}(\ket{0} \times \ket{0})  = \ket{0} \text{ El condicional } q_1?\text{ se evalúa.} \\
 &\text{Como } q_1 = \ket{0} \text{, se reduce a la rama derecha :} \\
 \end{align*}
-\begin{align*}
-&\rightarrow (\lambda q_2.\, q_2?\,\lambda bell.\,\code{NOT}\, bell\,.\,\lambda bell.\,bell)\,\ket{0}
-\end{align*}
 
+\begin{align*}
+&\rightarrow (\lambda q_2.\, q_2?\,\lambda bell.\,\code{NOT}\, bell\,.\,\lambda bell.\,bell)\,\ket{0} \\
+\end{align*}
 
 \begin{align*}
 &\rightarrow \ket{0}?\,\lambda bell.\,\code{NOT}\, bell\,.\,\lambda bell.\,bell
@@ -947,32 +947,24 @@ Tomamos la reduccion para la transmisicion de $(0,0)$
 &\rightarrow \lambda bell.\,bell
 \end{align*}
 
-
 \begin{align*}
 (\code{ALICE}\,\ket{00})\,\code{EPR} &\rightarrow (\lambda bell.\,bell)\,\code{EPR}
 \end{align*}
 
 \begin{align*}
-(\lambda bell.\,bell)\,\code{EPR}  &\rightarrow \code{EPR'}
+(\lambda bell.\,bell)\,\frac{1}{\sqrt{2}}(\ket{00}+\ket{11}  &\rightarrow \frac{1}{\sqrt{2}}(\ket{00}+\ket{11}
 \end{align*}
 
 \begin{align*}
-\code{SDC}(\ket{00}) \rightarrow \code{BOB}(\code{EPR}') \\
+\code{SDC}(\ket{00}) \rightarrow \code{BOB}(\frac{1}{\sqrt{2}}(\ket{00}+\ket{11})) \\
 \end{align*}
 \begin{align*}
-\code{BOB}(\code{EPR}') = \pi_2 \Big( 
+\code{BOB}(\frac{1}{\sqrt{2}}(\ket{00}+\ket{11}) = \pi_2 \Big( 
                 \big(\lambda qn.\; 
                     H(\text{head}\, qn) \times (\text{tail}\, qn)
-                \big)(\text{CNOT}\, \code{EPR'}) 
+                \big)(\text{CNOT}\, \frac{1}{\sqrt{2}}(\ket{00}+\ket{11}) 
             \Big) 
 \end{align*}
-
-Primero evaluamos la aplicación de $\code{CNOT}$ al estado $\code{EPR}'$.
-
-
-\[
-\code{CNOT}(\code{EPR}') = \code{CNOT}\left(\frac{1}{\sqrt{2}}(\ket{00} + \ket{11})\right)
-\]
 
 $\code{CNOT}$ se distribuye linealmente:
 
@@ -985,25 +977,22 @@ $\code{CNOT}$ se distribuye linealmente:
 Finalmente
 
 \begin{align*}
-\code{CNOT}(\code{EPR}')  &\rightarrow \frac{1}{\sqrt{2}}(\ket{00} + \ket{10})
+\code{BOB}(\frac{1}{\sqrt{2}}(\ket{00}+\ket{11}) = \pi_2 \Big( 
+                \big(\lambda qn.\; 
+                    H(\text{head}\, qn) \times (\text{tail}\, qn)
+                \big)\frac{1}{\sqrt{2}}(\ket{00} + \ket{10}) 
+            \Big) 
 \end{align*}
 
-
-
-
+El estado donde:
 \[
-qn = \frac{1}{\sqrt{2}}(\ket{00} + \ket{10})
-\]
-
-El estado $qn$ es separable:
-\[
-qn = \left(\frac{1}{\sqrt{2}}(\ket{0} + \ket{1})\right) \times \ket{0} = \ket{+} \times \ket{0}
+\left(\frac{1}{\sqrt{2}}(\ket{0} + \ket{1})\right) \times \ket{0} = \ket{+} \times \ket{0}
 \]
 
 Queda entonces:
 
 \begin{align*}
-\code{BOB}(\code{EPR}') 
+\code{BOB}(\frac{1}{\sqrt{2}}(\ket{00}+\ket{11})
 &= \pi_2 \Big( 
     \big(\lambda qn.\; 
         H(\text{head}\, qn) \times (\text{tail}\, qn)
@@ -1030,13 +1019,13 @@ H(\ket{+}) &= H\left(\frac{1}{\sqrt{2}}\ket{0} + \frac{1}{\sqrt{2}}\ket{1}\right
 \begin{align*}
 &\rightarrow \frac{1}{\sqrt{2}}\left(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1})\right) + \frac{1}{\sqrt{2}}\left(\frac{1}{\sqrt{2}}(\ket{0}-\ket{1})\right) \\
 &\rightarrow \frac{1}{2}(\ket{0}+\ket{1}) + \frac{1}{2}(\ket{0}-\ket{1}) \\
-&\rightarrow \ket{0}
+&\rightarrow \ket{00}
 \end{align*}
 
 Queda entonces:
 
 \[
-\code{BOB}(\code{EPR}') \rightarrow \pi_2(\ket{00})
+\code{BOB}(\frac{1}{\sqrt{2}}(\ket{00}+\ket{11}) \rightarrow \pi_2(\ket{00})
 \]
 \\
 Dado que el estado $\ket{00}$ es un término de base con  coeficiente de amplitud  1(creo que se llama asi), la medición resulta en:
