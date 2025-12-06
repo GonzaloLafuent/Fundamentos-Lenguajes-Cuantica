@@ -557,96 +557,143 @@ Bob.
 
 \subsection{Traza de Ejecucion}
 
+Tomaremos como operadores de medicion al conjunto $\{P_{00},P_{01},P_{10},P_{11}\}$ tales que:
+
+\begin{align*}
+P_{00} = \ket{00}\bra{00} \\
+P_{01} = \ket{01}\bra{01} \\
+P_{10} = \ket{10}\bra{10} \\
+P_{11} = \ket{11}\bra{11} \\
+\end{align*}
+
 \begin{ejemplo}
-  Si se quiere enviar el bit $00$ se aplica $(I\otimes I)$ a
-  $\beta_{00}$, por lo que el no se modifica el estado de bell:
+Si se quiere enviar el bit $00$ se aplica $(I\otimes I)$ a
+$\beta_{00}$, por lo que el no se modifica el estado de bell:
 
-  \begin{align*}
-    (I\otimes I)\beta_{00}
-    &= I \otimes \beta_{00}\\
-    &= I \otimes \frac{1}{\sqrt{2}}(\ket{00}+\ket{11})=\beta_{00}
-  \end{align*}
+\begin{align*}
+(I\otimes I)\beta_{00}
+&= I \otimes \beta_{00}\\
+&= I \otimes \frac{1}{\sqrt{2}}(\ket{00}+\ket{11})=\beta_{00}
+\end{align*}
 
-  con lo que se obtiene $\beta_{00}$. Luego aplicamos $(H\otimes I) CNOT \beta_{00} $ para recuperar los bits:
+con lo que se obtiene $\beta_{00}$. Luego aplicamos $(H\otimes I) CNOT \beta_{00} $ para recuperar los bits:
 
-  \begin{align*}
-    (H\otimes I) CNOT \beta_{00}
-    &= (H\otimes I) (CNOT (\frac{1}{\sqrt{2}}(\ket{00}+\ket{11})))\\
-    &= (H\otimes I) (\frac{1}{\sqrt{2}}(\ket{00}+\ket{10}))\\
-    &= (H\otimes I) (\frac{\ket{0}+\ket{1}}{\sqrt{2}} \otimes \ket{0})\\
-    &= (\frac{(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}) + (\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))}{\sqrt{2}} \otimes \ket{0})\\
-    &= (\frac{{\sqrt{2}}\ket{0}}{\sqrt{2}} \otimes \ket{0}) = \ket{00} 
-  \end{align*}
+\begin{align*}
+(H\otimes I) CNOT \beta_{00}
+&= (H\otimes I) (CNOT (\frac{1}{\sqrt{2}}(\ket{00}+\ket{11})))\\
+&= (H\otimes I) (\frac{1}{\sqrt{2}}(\ket{00}+\ket{10}))\\
+&= (H\otimes I) (\frac{\ket{0}+\ket{1}}{\sqrt{2}} \otimes \ket{0})\\
+&= (\frac{(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}) + (\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))}{\sqrt{2}} \otimes \ket{0})\\
+&= (\frac{{\sqrt{2}}\ket{0}}{\sqrt{2}} \otimes \ket{0}) = \ket{00} 
+\end{align*}
+
+Luego obtenemos la medicion tal que:
+
+\begin{align*}
+P(0) = \bra{00} M_{0} \ket{00} = \bra{00}\ket{00}\bra{00} \ket{00} = \ket{00} \bra{00} \ket{00}  = \ket{00} = 1\\
+P(1) = \bra{00} M_{1} \ket{00} = \bra{00}\ket{01}\bra{01} \ket{00} = 0\\
+P(2) = \bra{00} M_{2} \ket{00} = \bra{00}\ket{10}\bra{10} \ket{00} = 0\\
+P(3) = \bra{00} M_{3} \ket{00} = \bra{00}\ket{11}\bra{11} \ket{00} = 0\\
+\end{align*}
+
 \end{ejemplo}
 
 \begin{ejemplo}
-  Si se quiere enviar el bit $01$ se aplica $(X\otimes I)$ a
-  $\beta_{00}$, el estado de bell se modificara de la siguiente manera:
+Si se quiere enviar el bit $01$ se aplica $(X\otimes I)$ a
+$\beta_{00}$, el estado de bell se modificara de la siguiente manera:
 
-  \begin{align*}
-    (X\otimes I)\beta_{00}
-    &= (X \otimes I) \frac{1}{\sqrt{2}}(\ket{00}+\ket{11})\\
-    &= \frac{1}{\sqrt{2}}(\ket{10}+\ket{01}) = \frac{1}{\sqrt{2}}(\ket{01}+\ket{10}) = \beta_{01}\\
-  \end{align*}
+\begin{align*}
+(X\otimes I)\beta_{00}
+&= (X \otimes I) \frac{1}{\sqrt{2}}(\ket{00}+\ket{11})\\
+&= \frac{1}{\sqrt{2}}(\ket{10}+\ket{01}) = \frac{1}{\sqrt{2}}(\ket{01}+\ket{10}) = \beta_{01}\\
+\end{align*}
 
-  con lo que se obtiene $\beta_{01}$. Luego aplicamos $(H\otimes I) CNOT \beta_{01} $ para recuperar los bits:
+con lo que se obtiene $\beta_{01}$. Luego aplicamos $(H\otimes I) CNOT \beta_{01} $ para recuperar los bits:
 
-  \begin{align*}
-    (H\otimes I) CNOT \beta_{01}
-    &= (H\otimes I) (CNOT (\frac{1}{\sqrt{2}}(\ket{01}+\ket{10})))\\
-    &= (H\otimes I) (\frac{1}{\sqrt{2}}(\ket{01}+\ket{11}))\\
-    &= (H\otimes I) (\frac{\ket{0}+\ket{1}}{\sqrt{2}} \otimes \ket{1})\\
-    &= (\frac{(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}) + (\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))}{\sqrt{2}} \otimes \ket{1})\\
-    &= (\frac{{\sqrt{2}}\ket{0}}{\sqrt{2}} \otimes \ket{0}) = \ket{01} 
-  \end{align*}
+\begin{align*}
+(H\otimes I) CNOT \beta_{01}
+&= (H\otimes I) (CNOT (\frac{1}{\sqrt{2}}(\ket{01}+\ket{10})))\\
+&= (H\otimes I) (\frac{1}{\sqrt{2}}(\ket{01}+\ket{11}))\\
+&= (H\otimes I) (\frac{\ket{0}+\ket{1}}{\sqrt{2}} \otimes \ket{1})\\
+&= (\frac{(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}) + (\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))}{\sqrt{2}} \otimes \ket{1})\\
+&= (\frac{{\sqrt{2}}\ket{0}}{\sqrt{2}} \otimes \ket{0}) = \ket{01} 
+\end{align*}
+
+Luego obtenemos la medicion tal que:
+
+\begin{align*}
+P(0) = \bra{01} M_{0} \ket{01} = \bra{01}\ket{00}\bra{00} \ket{01} = 0 \\
+P(1) = \bra{01} M_{1} \ket{01} = \bra{01}\ket{01}\bra{01} \ket{01} = \ket{01} \bra{01} \ket{01}  = \ket{01} = 1\\
+P(2) = \bra{01} M_{2} \ket{01} = \bra{01}\ket{10}\bra{10} \ket{01} = 0\\
+P(3) = \bra{01} M_{3} \ket{01} = \bra{01}\ket{11}\bra{11} \ket{01} = 0\\
+\end{align*}
+
 \end{ejemplo}
 
 \begin{ejemplo}
-  Si se quiere enviar el bit $10$ se aplica $(Z\otimes I)$ a
-  $\beta_{00}$, el estado de bell se modificara de la siguiente manera:
+Si se quiere enviar el bit $10$ se aplica $(Z\otimes I)$ a
+$\beta_{00}$, el estado de bell se modificara de la siguiente manera:
 
-  \begin{align*}
-    (Z\otimes I)\beta_{00}
-    &= (Z \otimes I) \frac{1}{\sqrt{2}}(\ket{00}+\ket{11})\\
-    &= \frac{1}{\sqrt{2}}(\ket{00}-\ket{11}) = \frac{1}{\sqrt{2}}(\ket{00}-\ket{11}) = \beta_{10}\\
-  \end{align*}
+\begin{align*}
+(Z\otimes I)\beta_{00}
+&= (Z \otimes I) \frac{1}{\sqrt{2}}(\ket{00}+\ket{11})\\
+&= \frac{1}{\sqrt{2}}(\ket{00}-\ket{11}) = \frac{1}{\sqrt{2}}(\ket{00}-\ket{11}) = \beta_{10}\\
+\end{align*}
 
-  con lo que se obtiene $\beta_{10}$. Luego aplicamos $(H\otimes I) CNOT \beta_{10} $ para recuperar los bits:
+con lo que se obtiene $\beta_{10}$. Luego aplicamos $(H\otimes I) CNOT \beta_{10} $ para recuperar los bits:
 
-  \begin{align*}
-    (H\otimes I) CNOT \beta_{10}
-    &= (H\otimes I) (CNOT (\frac{1}{\sqrt{2}}(\ket{00}-\ket{11})))\\
-    &= (H\otimes I) (\frac{1}{\sqrt{2}}(\ket{00}-\ket{10}))\\
-    &= (H\otimes I) (\frac{\ket{0}-\ket{1}}{\sqrt{2}} \otimes \ket{0})\\
-    &= (\frac{(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}) - (\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))}{\sqrt{2}} \otimes \ket{0})\\
-    &= (\frac{{\sqrt{2}}\ket{1}}{\sqrt{2}} \otimes \ket{0}) = \ket{10} 
-  \end{align*}
+\begin{align*}
+(H\otimes I) CNOT \beta_{10}
+&= (H\otimes I) (CNOT (\frac{1}{\sqrt{2}}(\ket{00}-\ket{11})))\\
+&= (H\otimes I) (\frac{1}{\sqrt{2}}(\ket{00}-\ket{10}))\\
+&= (H\otimes I) (\frac{\ket{0}-\ket{1}}{\sqrt{2}} \otimes \ket{0})\\
+&= (\frac{(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}) - (\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))}{\sqrt{2}} \otimes \ket{0})\\
+&= (\frac{{\sqrt{2}}\ket{1}}{\sqrt{2}} \otimes \ket{0}) = \ket{10} 
+\end{align*}
+
+Luego obtenemos la medicion tal que:
+
+\begin{align*}
+P(0) = \bra{10} M_{0} \ket{10} = \bra{10}\ket{00}\bra{00} \ket{10} = 0\\
+P(1) = \bra{10} M_{1} \ket{10} = \bra{10}\ket{01}\bra{01} \ket{10} = 0\\
+P(2) = \bra{10} M_{2} \ket{10} = \bra{10}\ket{10}\bra{10} \ket{10} = \ket{10} \bra{10} \ket{10}  = \ket{10} = 1\\
+P(3) = \bra{10} M_{3} \ket{10} = \bra{10}\ket{11}\bra{11} \ket{10} = 0\\
+\end{align*}
 \end{ejemplo}
 
 \begin{ejemplo}
-  Si se quiere enviar el bit $11$ se aplica $(ZX\otimes I)$ a
-  $\beta_{00}$, el estado de bell se modificara de la siguiente manera:
-
-  
-  \begin{align*}
-    (ZX\otimes I)\beta_{00}
-    &=(Z\otimes I)\left((X\otimes I)\beta_{00}\right)\\
-    &=(Z\otimes I)\left((X\otimes I)\frac{1}{\sqrt{2}}(\ket{00}+\ket{11})\right)\\
-    &=(Z\otimes I)\left(\frac{1}{\sqrt{2}}(\ket{10}+\ket{01})\right)\\
-    &=\frac{1}{\sqrt{2}}(-\ket{10}+\ket{01})=\beta_{11}
-  \end{align*}
+Si se quiere enviar el bit $11$ se aplica $(ZX\otimes I)$ a
+$\beta_{00}$, el estado de bell se modificara de la siguiente manera:
 
 
-  con lo que se obtiene $\beta_{11}$. Luego aplicamos $(H\otimes I) CNOT \beta_{11} $ para recuperar los bits:
+\begin{align*}
+(ZX\otimes I)\beta_{00}
+&=(Z\otimes I)\left((X\otimes I)\beta_{00}\right)\\
+&=(Z\otimes I)\left((X\otimes I)\frac{1}{\sqrt{2}}(\ket{00}+\ket{11})\right)\\
+&=(Z\otimes I)\left(\frac{1}{\sqrt{2}}(\ket{10}+\ket{01})\right)\\
+&=\frac{1}{\sqrt{2}}(-\ket{10}+\ket{01})=\beta_{11}
+\end{align*}
 
-  \begin{align*}
-    (H\otimes I) CNOT \beta_{11}
-    &= (H\otimes I) (CNOT (\frac{1}{\sqrt{2}}(\ket{01}-\ket{10})))\\
-    &= (H\otimes I) (\frac{1}{\sqrt{2}}(\ket{01}-\ket{11}))\\
-    &= (H\otimes I) (\frac{\ket{0}-\ket{1}}{\sqrt{2}} \otimes \ket{1} )\\
-    &= (\frac{(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}) - (\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))}{\sqrt{2}})\\
-    &= (\frac{{\sqrt{2}}\ket{1}}{\sqrt{2}} \otimes \ket{1}) = \ket{11} 
-  \end{align*}
+
+con lo que se obtiene $\beta_{11}$. Luego aplicamos $(H\otimes I) CNOT \beta_{11} $ para recuperar los bits:
+
+\begin{align*}
+(H\otimes I) CNOT \beta_{11}
+&= (H\otimes I) (CNOT (\frac{1}{\sqrt{2}}(\ket{01}-\ket{10})))\\
+&= (H\otimes I) (\frac{1}{\sqrt{2}}(\ket{01}-\ket{11}))\\
+&= (H\otimes I) (\frac{\ket{0}-\ket{1}}{\sqrt{2}} \otimes \ket{1} )\\
+&= (\frac{(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}) - (\frac{1}{\sqrt{2}}(\ket{0}-\ket{1}))}{\sqrt{2}})\\
+&= (\frac{{\sqrt{2}}\ket{1}}{\sqrt{2}} \otimes \ket{1}) = \ket{11} 
+\end{align*}
+
+Luego obtenemos la medicion tal que:
+
+\begin{align*}
+P(0) = \bra{11} M_{0} \ket{11} = \bra{11}\ket{00}\bra{00} \ket{11} = 0\\
+P(1) = \bra{11} M_{1} \ket{11} = \bra{11}\ket{01}\bra{01} \ket{11} = 0\\
+P(2) = \bra{11} M_{2} \ket{11} = \bra{11}\ket{10}\bra{10} \ket{11} = 0\\
+P(3) = \bra{11} M_{3} \ket{11} = \bra{11}\ket{11}\bra{11} \ket{11} = \ket{11} \bra{11} \ket{11}  = \ket{11} = 1\\
+\end{align*}
 \end{ejemplo}
 
 \subsection{Término y Tipado para control clasico}
