@@ -686,7 +686,7 @@ SDC = \lambda b_1. \lambda b_2. \\
 
 El tipo del término es:
 
-$$\vdash M_{SD} : !(\mathsf{bit} \multimap \mathsf{bit} \multimap !(\mathsf{qbit} \otimes \mathsf{qbit} \multimap \mathsf{bit} \otimes \mathsf{bit}))$$
+$$\vdash M_{SD} : !(\mathsf{bit} \multimap \mathsf{bit} \multimap \mathsf{qbit} \otimes \mathsf{qbit} \multimap \mathsf{bit} \otimes \mathsf{bit})$$
 
 \begin{itemize}
 \item $\mathsf{bit}$: tipo de bits clásicos 
@@ -824,13 +824,15 @@ Luego tenemos:
 Z = \lambda x : B.x? (-\ket{1}). \ket{0}: B \Rightarrow SB\\ \\
 NOT = \lambda x : B.x? \ket{0}. \ket{1}: B \Rightarrow B\\ \\
 CNOT = \lambda q : BXB. (\lambda q_1 .(\lambda q_2. q_1 ? q_1 \\ 
-\times (NOT\,q_2)  . q_1 \times q_2) tail \, q)head\,q : B\times B \rightarrow SB
+\times (NOT\,q_2)  . q_1 \times q_2) tail \, q)head\,q : B\times B \rightarrow B\times B
 \end{align*}
+
+
 
 Apartir de la composicion de esta compuertas podemos generar el circuito completo:
 
 \begin{align*}
-& EPR = \frac{1}{\sqrt{2}}(\ket{00}+\ket{11}) \\ \\
+& EPR = \frac{1}{\sqrt{2}}(\ket{00}+\ket{11})  : S(B \times B) \\ \\
 & ALICE = \lambda q: B \times B. \\
 &\qquad (\lambda q_1.\; (\lambda q_2.\; \\
 &\qquad\qquad q_1? \\
@@ -840,13 +842,164 @@ Apartir de la composicion de esta compuertas podemos generar el circuito complet
 &\qquad\qquad.q_2? \lambda bell.\; NOT\, bell \\
 &\qquad\qquad\qquad .\lambda bell. bell \\ 
 &\qquad )) {tail}(q))\; {head}(q) : B \times B \rightarrow (SB \Rightarrow SB) \\ \\
-& BOB = \lambda q: B \times B.(\lambda qn. H (head \, qn) \times (tail \, qn)  )(CNOT \, q) \\ \\
+& BOB = \lambda q : S(B \times B).\; 
+            \pi_2 \Big( 
+                \big(\lambda qn : S(B \times B).\; 
+                    H(\text{head}\, qn) \times (\text{tail}\, qn)
+                \big)(\text{CNOT}\, q) 
+            \Big) 
+       : S(B \times B) \Rightarrow B \times B
+\end{align*} \\ \\
+
 & SDC = \lambda b: B \times B. Bob ((Alice \, b) EPR)\\
 \end{align*}
 
-\subsubsection{Tipado del termino}
+
+\subsubsection{Tipado del Término}
+
+El tipo del término $\mathtt{SDC}$ es:
+
+\[
+\vdash \mathtt{SDC} : B \times B \Rightarrow B \times B \text{(no se si es asi creo que al final es D(BxB) no BxB, igual en bob }
+\]
+
 
 \subsubsection{Traza de reduccion}
+
+Tomamos la reduccion para la transmisicion de $(0,0)$
+
+\[
+\code{SDC}(\ket{00}) = \code{BOB}\big((\code{ALICE}\,\ket{00})\,\code{EPR}\big)
+\]
+
+
+\begin{align*}
+\code{ALICE}\,\ket{00} &\rightarrow
+ \lambda q. \\
+&\qquad (\lambda q_1.\; (\lambda q_2.\; \\
+&\qquad\qquad q_1? \\
+&\qquad\qquad\qquad q_2? \\
+&\qquad\qquad\qquad\qquad \lambda bell.\; NOT(Z\, bell)\; \\ 
+&\qquad\qquad\qquad\qquad .\lambda bell.\; Z\, bell\; \\
+&\qquad\qquad.q_2? \lambda bell.\; NOT\, bell \\
+&\qquad\qquad\qquad .\lambda bell. bell \\ 
+&\qquad )) {tail}(q))\; {head}(q)  \\ \\
+&\text{head}(\ket{00}) = \ket{0} \text{ y } {tail}(\ket{00})  = \ket{0} \text{ El condicional } q_1?\text{ se evalúa.} \\
+&\text{Como } q_1 = \ket{0} \text{, se reduce a la rama derecha :} \\
+\end{align*}
+\begin{align*}
+&\rightarrow (\lambda q_2.\, q_2?\,\lambda bell.\,\code{NOT}\, bell\,.\,\lambda bell.\,bell)\,\ket{0}
+\end{align*}
+
+
+\begin{align*}
+&\rightarrow \ket{0}?\,\lambda bell.\,\code{NOT}\, bell\,.\,\lambda bell.\,bell
+\end{align*}
+
+\begin{align*}
+&\rightarrow \lambda bell.\,bell
+\end{align*}
+
+
+\begin{align*}
+(\code{ALICE}\,\ket{00})\,\code{EPR} &\rightarrow (\lambda bell.\,bell)\,\code{EPR}
+\end{align*}
+
+\begin{align*}
+(\lambda bell.\,bell)\,\code{EPR}  &\rightarrow \code{EPR'}
+\end{align*}
+
+\begin{align*}
+\code{SDC}(\ket{00}) \rightarrow \code{BOB}(\code{EPR}') \\
+\end{align*}
+\begin{align*}
+\code{BOB}(\code{EPR}') = \pi_2 \Big( 
+                \big(\lambda qn.\; 
+                    H(\text{head}\, qn) \times (\text{tail}\, qn)
+                \big)(\text{CNOT}\, \code{EPR'}) 
+            \Big) 
+\end{align*}
+
+Primero evaluamos la aplicación de $\code{CNOT}$ al estado $\code{EPR}'$.
+
+
+\[
+\code{CNOT}(\code{EPR}') = \code{CNOT}\left(\frac{1}{\sqrt{2}}(\ket{00} + \ket{11})\right)
+\]
+
+$\code{CNOT}$ se distribuye linealmente:
+
+\begin{align*}
+\code{CNOT}\left(\frac{1}{\sqrt{2}}(\ket{00} + \ket{11})\right) 
+&= \frac{1}{\sqrt{2}}\,\code{CNOT}(\ket{00}) + \frac{1}{\sqrt{2}}\,\code{CNOT}(\ket{11}) \\
+&= \frac{1}{\sqrt{2}}\ket{00} + \frac{1}{\sqrt{2}}\ket{10}
+\end{align*}
+
+Finalmente
+
+\begin{align*}
+\code{CNOT}(\code{EPR}')  &\rightarrow \frac{1}{\sqrt{2}}(\ket{00} + \ket{10})
+\end{align*}
+
+
+
+
+\[
+qn = \frac{1}{\sqrt{2}}(\ket{00} + \ket{10})
+\]
+
+El estado $qn$ es separable:
+\[
+qn = \left(\frac{1}{\sqrt{2}}(\ket{0} + \ket{1})\right) \times \ket{0} = \ket{+} \times \ket{0}
+\]
+
+Queda entonces:
+
+\begin{align*}
+\code{BOB}(\code{EPR}') 
+&= \pi_2 \Big( 
+    \big(\lambda qn.\; 
+        H(\text{head}\, qn) \times (\text{tail}\, qn)
+    \big)(\ket{+} \times \ket{0}) 
+\Big) \\
+&\rightarrow \pi_2 \big( H(\text{head}\, (\ket{+} \times \ket{0})) \times (\text{tail}\, (\ket{+} \times \ket{0})) \big) \quad \text{(Aplicando $\beta$)} \\
+&= \pi_2 \big( H(\ket{+}) \times \ket{0} \big) \quad  \\
+\end{align*}
+
+
+Se aplica $H$ al primer qubit $\ket{+}$.
+$H$ se distribuye linealmente sobre $\ket{+}$:
+
+\begin{align*}
+H(\ket{+}) &= H\left(\frac{1}{\sqrt{2}}\ket{0} + \frac{1}{\sqrt{2}}\ket{1}\right) \\
+&\rightarrow \frac{1}{\sqrt{2}} H(\ket{0}) + \frac{1}{\sqrt{2}} H(\ket{1})
+\end{align*}
+
+\[
+\rightarrow \frac{1}{\sqrt{2}}\ket{+} + \frac{1}{\sqrt{2}}\ket{-}
+\]
+
+
+\begin{align*}
+&\rightarrow \frac{1}{\sqrt{2}}\left(\frac{1}{\sqrt{2}}(\ket{0}+\ket{1})\right) + \frac{1}{\sqrt{2}}\left(\frac{1}{\sqrt{2}}(\ket{0}-\ket{1})\right) \\
+&\rightarrow \frac{1}{2}(\ket{0}+\ket{1}) + \frac{1}{2}(\ket{0}-\ket{1}) \\
+&\rightarrow \ket{0}
+\end{align*}
+
+Queda entonces:
+
+\[
+\code{BOB}(\code{EPR}') \rightarrow \pi_2(\ket{00})
+\]
+\\
+Dado que el estado $\ket{00}$ es un término de base con  coeficiente de amplitud  1(creo que se llama asi), la medición resulta en:
+
+\[
+\pi_2(\ket{00}) \rightarrow \{1\}\ket{00}
+\]
+
+
+\end{document}
 
 \subsection{Termino en calculo Lb}
 Definimos como macros:
